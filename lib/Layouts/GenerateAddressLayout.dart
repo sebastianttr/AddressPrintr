@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:address_printr/Models/PostalInformation.dart';
@@ -6,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import "../Widgets/InputText.dart";
 import "../Models/PDFWidgets/Text.dart";
 import 'package:http/http.dart' as http;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class GenerateAddressLayout extends StatefulWidget {
   const GenerateAddressLayout({Key? key}) : super(key: key);
@@ -53,6 +57,9 @@ class _GenerateAddressLayoutState extends State<GenerateAddressLayout> {
 
     // ignore: avoid_print
     print(json);
+
+    final listOfPrinters = await Printing.listPrinters();
+    // ignore: avoid_print, unnecessary_type_check
 
     final url = Uri.parse("http://192.168.0.159:8080/generate");
 

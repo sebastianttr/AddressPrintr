@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Widgets/SelectionItem.dart';
 import './Layouts/SettingsLayout.dart';
 import './Utils/NotificationOverlayHandler.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
