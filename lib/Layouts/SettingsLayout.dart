@@ -1,5 +1,4 @@
 import 'package:address_printr/Modals/SetAddressModalView.dart';
-import 'package:address_printr/Widgets/AppBarHandler.dart';
 import 'package:flutter/material.dart';
 import '../Widgets/SettingsItem.dart';
 import "../Widgets/CustomAppBar.dart";
@@ -12,63 +11,53 @@ class SettingsLayout extends StatefulWidget {
 }
 
 class _SettingsLayout extends State<SettingsLayout> {
-  List<Widget> testWidgets = [];
+  List<Widget> settingsItem = [];
   final ScrollController _scrollController = ScrollController();
+  double appBarHeight = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    for (int i = 0; i < 30; i++) {
-      testWidgets.add(
-        SettingsItem(
-            onClick: () {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  context: context,
-                  builder: (buildContext) {
-                    return SetAddressModalView(context: context);
-                  });
-            },
-            titleText: "Set own address",
-            descriptionText:
-                "Set your own information in order to use it to generate a new address sheet"),
-      );
-    }
-
-    _scrollController.addListener(() {});
+    settingsItem.add(
+      SettingsItem(
+          onClick: () {
+            showModalBottomSheet(
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                context: context,
+                builder: (buildContext) {
+                  return SetAddressModalView(context: context);
+                });
+          },
+          titleText: "Set own address",
+          descriptionText:
+              "Set your own information in order to use it to generate a new address sheet"),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarHandler(
+        appBar: CustomAppBar(
           scrollController: _scrollController,
-        ).getCustomAppBar(),
-        body: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: ListView.builder(
-              itemBuilder: (buildContext, index) {
-                return SettingsItem(
-                    onClick: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          context: context,
-                          builder: (buildContext) {
-                            return SetAddressModalView(context: context);
-                          });
-                    },
-                    titleText: "Set own address",
-                    descriptionText:
-                        "Set your own information in order to use it to generate a new address sheet");
-              },
-              itemCount: testWidgets.length,
-              scrollDirection: Axis.vertical,
-              physics: const BouncingScrollPhysics(),
+          title: "Settings",
+          height: appBarHeight,
+          onScroll: (aBHeight) {
+            setState(() {
+              appBarHeight = aBHeight;
+            });
+          },
+        ),
+        body: Container(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
               controller: _scrollController,
+              physics: const ClampingScrollPhysics(),
+              child: Column(children: settingsItem),
             )));
   }
 }

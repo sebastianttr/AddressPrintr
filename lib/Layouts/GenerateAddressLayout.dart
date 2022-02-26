@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import "../Widgets/CustomAppBar.dart";
 
 class GenerateAddressLayout extends StatefulWidget {
   const GenerateAddressLayout({Key? key}) : super(key: key);
@@ -22,6 +23,9 @@ class _GenerateAddressLayoutState extends State<GenerateAddressLayout> {
   TextEditingController fullNameController = TextEditingController();
   TextEditingController streetInfoController = TextEditingController();
   TextEditingController cityInfoController = TextEditingController();
+
+  ScrollController _scrollController = ScrollController();
+  double appBarHeight = 0;
 
   generate() async {
     final storage = await SharedPreferences.getInstance();
@@ -87,44 +91,51 @@ class _GenerateAddressLayoutState extends State<GenerateAddressLayout> {
     ThemeData theme = Theme.of(context);
 
     return Scaffold(
-        appBar: AppBar(),
-        body: Padding(
+        appBar: CustomAppBar(
+          scrollController: _scrollController,
+          title: "Generate",
+          height: kToolbarHeight,
+          onScroll: (aBHeight) {
+            setState(() {
+              appBarHeight = aBHeight;
+            });
+          },
+        ),
+        body: Container(
           padding: const EdgeInsets.all(10),
+          color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 15),
-                child: const Text(
-                  "Generate address",
-                  style: TextStyle(fontSize: 35),
-                ),
-              ),
               Expanded(
-                  child: Column(
-                children: [
-                  InputText(
-                    controller: fullNameController,
-                    height: 40,
-                    helperText: "Full name",
-                    hintText: "Enter full name here",
-                    padding: const EdgeInsets.only(top: 10, left: 5),
-                  ),
-                  InputText(
-                    controller: streetInfoController,
-                    height: 40,
-                    helperText: "Street name and number",
-                    hintText: "Enter full name here",
-                    padding: const EdgeInsets.only(top: 10, left: 5),
-                  ),
-                  InputText(
-                    controller: cityInfoController,
-                    height: 40,
-                    helperText: "City with postal code",
-                    hintText: "Enter full name here",
-                    padding: const EdgeInsets.only(top: 10, left: 5),
-                  ),
-                ],
+                  child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    InputText(
+                      controller: fullNameController,
+                      height: 40,
+                      helperText: "Full name",
+                      hintText: "Enter full name here",
+                      padding: const EdgeInsets.only(top: 10, left: 5),
+                    ),
+                    InputText(
+                      controller: streetInfoController,
+                      height: 40,
+                      helperText: "Street name and number",
+                      hintText: "Enter full name here",
+                      padding: const EdgeInsets.only(top: 10, left: 5),
+                    ),
+                    InputText(
+                      controller: cityInfoController,
+                      height: 40,
+                      helperText: "City with postal code",
+                      hintText: "Enter full name here",
+                      padding: const EdgeInsets.only(top: 10, left: 5),
+                    ),
+                  ],
+                ),
               )),
               Container(
                   width: MediaQuery.of(context).size.width,

@@ -7,6 +7,7 @@ import 'Widgets/SelectionItem.dart';
 import './Layouts/SettingsLayout.dart';
 import './Utils/NotificationOverlayHandler.dart';
 import 'package:http/http.dart' as http;
+import "../Widgets/CustomAppBar.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,6 +56,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  ScrollController _scrollController = ScrollController();
+  double appBarHeight = 0;
+
   List<Widget> getSelectionItems() {
     return [
       const SelectionItem(
@@ -92,27 +96,33 @@ class _MyHomePageState extends State<MyHomePage> {
     checkPostalInformation();
   }
 
+  /*
+
+  final pref = await SharedPreferences.getInstance();
+  pref.remove("postalInformation");
+  openMissingInfoDialog();
+
+  */
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                final pref = await SharedPreferences.getInstance();
-                pref.remove("postalInformation");
-                openMissingInfoDialog();
-
-                //showNotifier(context, "Address set.");
-              },
-              icon: const Icon(Icons.delete))
-        ],
+      appBar: CustomAppBar(
+        scrollController: _scrollController,
+        title: "Address Printr",
+        height: appBarHeight,
+        onScroll: (aBHeight) {
+          setState(() {
+            appBarHeight = aBHeight;
+          });
+        },
       ),
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: getSelectionItems()),
+      body: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: getSelectionItems())),
       backgroundColor: Colors.white,
     );
   }
