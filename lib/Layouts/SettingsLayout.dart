@@ -1,5 +1,7 @@
 import 'package:address_printr/Modals/SetAddressModalView.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Modals/MissingAddressModalView.dart';
 import '../Widgets/SettingsItem.dart';
 import "../Widgets/CustomAppBar.dart";
 
@@ -49,6 +51,21 @@ class _SettingsLayout extends State<SettingsLayout> {
               appBarHeight = aBHeight;
             });
           },
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  final pref = await SharedPreferences.getInstance();
+                  pref.remove("postalInformation");
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (buildContext) {
+                        return MissingAddressModalView(context: context);
+                      });
+                },
+                icon: const Icon(Icons.delete_outline_rounded))
+          ],
         ),
         body: Container(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),

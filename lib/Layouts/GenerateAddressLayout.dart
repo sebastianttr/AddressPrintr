@@ -89,71 +89,79 @@ class _GenerateAddressLayoutState extends State<GenerateAddressLayout> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
     return Scaffold(
-        appBar: CustomAppBar(
-          scrollController: _scrollController,
-          title: "Generate",
-          height: kToolbarHeight,
-          onScroll: (aBHeight) {
-            setState(() {
-              appBarHeight = aBHeight;
-            });
-          },
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          color: Colors.white,
+      appBar: CustomAppBar(
+        scrollController: _scrollController,
+        title: "Generate",
+        height: appBarHeight,
+        onScroll: (aBHeight) {
+          setState(() {
+            appBarHeight = aBHeight;
+          });
+        },
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/settings");
+              },
+              icon: const Icon(Icons.settings_outlined)),
+        ],
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        color: Colors.white,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          physics: BouncingScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                  child: SingleChildScrollView(
-                controller: _scrollController,
-                physics: NeverScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    InputText(
-                      controller: fullNameController,
-                      height: 40,
-                      helperText: "Full name",
-                      hintText: "Enter full name here",
-                      padding: const EdgeInsets.only(top: 10, left: 5),
-                    ),
-                    InputText(
-                      controller: streetInfoController,
-                      height: 40,
-                      helperText: "Street name and number",
-                      hintText: "Enter full name here",
-                      padding: const EdgeInsets.only(top: 10, left: 5),
-                    ),
-                    InputText(
-                      controller: cityInfoController,
-                      height: 40,
-                      helperText: "City with postal code",
-                      hintText: "Enter full name here",
-                      padding: const EdgeInsets.only(top: 10, left: 5),
-                    ),
-                  ],
-                ),
-              )),
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  margin: const EdgeInsets.only(bottom: 15),
-                  child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100)),
-                      color: theme.primaryColor,
-                      child: const Text(
-                        "Generate",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {
-                        generate();
-                      })),
+              InputText(
+                controller: fullNameController,
+                height: 40,
+                helperText: "Full name",
+                hintText: "Enter full name here",
+                padding: const EdgeInsets.only(top: 10, left: 5),
+              ),
+              InputText(
+                controller: streetInfoController,
+                height: 40,
+                helperText: "Street name and number",
+                hintText: "Enter street name and number",
+                padding: const EdgeInsets.only(top: 10, left: 5),
+              ),
+              InputText(
+                controller: cityInfoController,
+                height: 40,
+                helperText: "City with postal code",
+                hintText: "Enter city with postal code",
+                padding: const EdgeInsets.only(top: 10, left: 5),
+              ),
             ],
           ),
-        ));
+        ),
+      ),
+      floatingActionButton: keyboardIsOpened
+          ? null
+          : Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width - 20,
+              margin: const EdgeInsets.all(5),
+              color: Colors.transparent,
+              child: MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100)),
+                  color: theme.primaryColor,
+                  child: const Text(
+                    "Generate",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    generate();
+                  })),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
   }
 }

@@ -56,7 +56,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   double appBarHeight = 0;
 
   List<Widget> getSelectionItems() {
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: "Settings",
           description: "Set your address or configure your print setup",
           imgPath: "./assets/images/settings.png",
-          linksTo: "/settings")
+          linksTo: "/settings"),
     ];
   }
 
@@ -119,11 +119,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
           controller: _scrollController,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: getSelectionItems())),
-      backgroundColor: Colors.white,
+          child: Container(
+            color: Colors.white,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: getSelectionItems()),
+          )),
     );
   }
 }

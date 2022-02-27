@@ -13,7 +13,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   double height;
   double fontSize;
   String title;
-  List<Widget> actions;
+  List<IconButton> actions;
   final ScrollController? scrollController;
   Function(double height)? onScroll;
 
@@ -45,6 +45,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   double height = 0;
   double fontSize = 0;
   double expansionRatio = 0;
+  List<IconButton> listOfActions = [];
 
   @override
   void initState() {
@@ -119,14 +120,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back_ios_new_sharp))
-            ])
-          else
-            Stack(alignment: Alignment.topLeft, children: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.home_filled))
             ]),
           Expanded(
               child: Padding(
-                  padding: const EdgeInsets.only(top: 17),
+                  padding: EdgeInsets.only(
+                      top: 17, left: Navigator.canPop(context) ? 0 : 10),
                   child: Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.topLeft,
@@ -135,28 +133,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           top: 0.2 +
                               (kToolbarHeight * expansionRatio) * 0.6 -
                               fontSize / 4,
-                          left: -35 * expansionRatio,
+                          left: (Navigator.canPop(context) ? -35 : 0) *
+                              expansionRatio,
                           child: Text(widget.title,
                               style: TextStyle(
                                   fontSize: fontSize, color: Colors.black)))
                     ],
                   ))),
-          /*
           Padding(
               padding: EdgeInsets.only(
                   top: 0.3 + (expansionRatio * kToolbarHeight) * 0.7,
                   right: expansionRatio * 10),
-              child: ListView.builder(
-                itemBuilder: (BuildContext buildContext, int index) {
-                  return IconButton(
-                      onPressed: () {},
-                      iconSize: 22 + expansionRatio * 10,
-                      icon: const Icon(Icons.settings));
-                },
-                itemCount: widget.actions.length,
-                scrollDirection: Axis.vertical,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: widget.actions.reversed.toList(),
               ))
-              */
         ]));
   }
 }
