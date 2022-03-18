@@ -107,25 +107,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        scrollController: _scrollController,
-        title: "Address Printr",
-        height: appBarHeight,
-        onScroll: (aBHeight) {
-          setState(() {
-            appBarHeight = aBHeight;
-          });
-        },
-      ),
-      body: SingleChildScrollView(
+        appBar: CustomAppBar(
+          scrollController: _scrollController,
+          title: "Address Printr",
+          height: appBarHeight,
+          onScroll: (aBHeight) {
+            setState(() {
+              appBarHeight = aBHeight;
+            });
+          },
+        ),
+        body: SingleChildScrollView(
           controller: _scrollController,
-          child: Container(
-            color: Colors.white,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: getSelectionItems()),
-          )),
-    );
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: getSelectionItems()),
+        ));
   }
 }

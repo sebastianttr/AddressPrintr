@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:address_printr/Models/PostalInformation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../Utils/NotificationOverlayHandler.dart';
 import '../Widgets/InputText.dart';

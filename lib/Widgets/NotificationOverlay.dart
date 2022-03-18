@@ -7,13 +7,19 @@ class NotificationOverlay extends StatefulWidget {
   final BuildContext renderContext;
   final Duration duration;
   final Function onDone;
+  final String? positon; // top,bottom
+  final String? shape; // pill, expanded
+  final Color? color;
 
   const NotificationOverlay(
       {Key? key,
       required this.text,
       required this.renderContext,
       required this.onDone,
-      required this.duration})
+      required this.duration,
+      this.positon = "bottom",
+      this.shape = "expanded",
+      this.color = Colors.grey})
       : super(key: key);
 
   @override
@@ -59,7 +65,9 @@ class _NotificationOverlayState extends State<NotificationOverlay> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        top: heigthStatusBar + kToolbarHeight + 5.0,
+        top:
+            (widget.positon == "top") ? kToolbarHeight + heigthStatusBar : null,
+        bottom: (widget.positon == "bottom") ? 0 : null,
         width: box.size.width,
         child: Material(
           type: MaterialType.transparency,
@@ -72,11 +80,15 @@ class _NotificationOverlayState extends State<NotificationOverlay> {
               height: height,
               curve: Curves.fastOutSlowIn,
               duration: const Duration(milliseconds: 600),
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              margin: (widget.shape == "pill")
+                  ? const EdgeInsets.symmetric(vertical: 5, horizontal: 5)
+                  : null,
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: theme.colorScheme.primary,
+                  borderRadius: (widget.shape == "pill")
+                      ? BorderRadius.circular(10)
+                      : null,
+                  color: widget.color,
                   boxShadow: [
                     BoxShadow(
                         blurRadius: 3,
